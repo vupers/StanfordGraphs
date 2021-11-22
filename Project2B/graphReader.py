@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import os
 from random import randrange
-import csv
 import numpy
 
 def obtainData(fname):
@@ -41,7 +40,7 @@ def adjacency_matrix(G, results_dir):
     matrix = matrix.todense()
     print(matrix)
     mat = numpy.asarray(matrix)
-    fname = results_dir + 'test.csv'
+    fname = results_dir + 'adjacency.csv'
     numpy.savetxt(fname, mat, delimiter=",")
 
 def avg_clustering(G, results_dir):
