@@ -5,7 +5,7 @@ from random import randrange
 from networkx.classes.function import neighbors
 import numpy
 import seaborn as sns
-
+import bonusPart
 def obtainData(fname):
     results_dir = createFolder(fname)
     edges = readGraph(fname)
@@ -13,10 +13,10 @@ def obtainData(fname):
     G.add_edges_from(edges)
     # adjacency_matrix(G,results_dir)
     # avg_clustering(G,results_dir)
-    plot_degree_dist(G,results_dir, fname)
+    #plot_degree_dist(G,results_dir, fname)
     # sampleRandomNode(G, results_dir)
-    #removeIsolated(G)
-
+    #bonusPart.estimateValues(G)
+    bonusPart.poissonFit(G)
 
 def createFolder(fname):
     """creation of the results folder"""
@@ -88,7 +88,6 @@ def plot_degree_dist(G, results_dir, fname):
     logname = results_dir + 'loglog.svg'
     plt.savefig(logname)
 
-
 def sampleRandomNode(G, results_dir):
     """v) Calculate the average degree of the neighbors of a randomly chosen node in one
     network of your choice. Compare the result with the average degree of the network.
@@ -111,24 +110,3 @@ def sampleRandomNode(G, results_dir):
     with open(fname,'w') as f:
         string =  f'out of {ran} trials, we found a lower number {counter} times'
         f.write(string)
-   
-def removeIsolated(G):
-    iterations = 100000
-    counter = 0
-    sumOfKv0 = 0
-    sumOfKv1 = 0
-    for _ in range(0,iterations):
-        randomNode = randrange (0, G.number_of_nodes())
-        numberOfNeighbors = sum(1 for _ in G.neighbors(randomNode))
-        neighborIndex = randrange(0, numberOfNeighbors)
-        Kv0 = G.degree[randomNode]
-        Kv1 = G.degree[neighborIndex]
-        sumOfKv0 += Kv0
-        sumOfKv1 += Kv1
-        # print(f'Kv0 = {Kv0}, Kv1 = {Kv1}')
-        if Kv1 > Kv0:
-            counter = counter + 1
-    expectedValueKv0 = sumOfKv0 / iterations
-    expectedValueKv1 = sumOfKv1 / iterations
-    print(f'E(Kv0) = {expectedValueKv0}, E(Kv1) = {expectedValueKv1}')
-    print(f'out of {iterations} trials, Kv1 was larger than Kv0 {counter} times')
